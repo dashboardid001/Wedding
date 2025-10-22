@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Undangan Pernikahan</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Open+Sans&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <div class="ornament">❦</div>
+            <h1>Undangan Pernikahan</h1>
+            <p>The Wedding of</p>
+        </div>
+
+        <!-- Foto Couple -->
+        <div class="couple-section">
+            <div class="couple-photo">
+                <div class="photo-placeholder">
+                    👰‍♀️🤵‍♂️
+                </div>
+            </div>
+            <div class="couple-names">
+                <h2>Sarah &amp; Michael</h2>
+                <p>"Dan di antara tanda-tanda kekuasaan-Nya ialah Dia menciptakan untukmu pasangan hidup dari jenismu sendiri, supaya kamu merasa tenteram kepadanya."</p>
+                <p class="verse">QS. Ar-Rum: 21</p>
+            </div>
+        </div>
+
+        <!-- Nama Tamu -->
+        <div class="guest-section">
+            <div class="guest-card">
+                <p class="invitation-to">Kepada Yang Terhormat:</p>
+                <div class="guest-name" id="guestName">
+                    <!-- Nama akan muncul di sini -->
+                </div>
+                <div class="separator"></div>
+                <p class="message">Kami berharap kehadiran Bapak/Ibu/Saudara/i dalam acara pernikahan kami</p>
+            </div>
+        </div>
+
+        <!-- Detail Acara -->
+        <div class="event-details">
+            <div class="event-card">
+                <h3>📅 Save The Date</h3>
+                <div class="event-info">
+                    <div class="info-item">
+                        <span class="icon">🗓️</span>
+                        <div class="details">
+                            <strong>Sabtu, 15 Maret 2025</strong>
+                            <p>09:00 WIB - Selesai</p>
+                        </div>
+                    </div>
+                    <div class="info-item">
+                        <span class="icon">📍</span>
+                        <div class="details">
+                            <strong>Grand Ballroom Hotel Maju</strong>
+                            <p>Jl. Kemerdekaan No. 123, Jakarta</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Konfirmasi Kehadiran -->
+        <div class="rsvp-section">
+            <h3>Konfirmasi Kehadiran</h3>
+            <div class="rsvp-buttons" id="rsvpButtons">
+                <button class="btn btn-confirm" onclick="confirmAttendance('hadir')">
+                    ✅ Ya, Saya Hadir
+                </button>
+                <button class="btn btn-decline" onclick="confirmAttendance('tidak_hadir')">
+                    ❌ Maaf, Tidak Bisa
+                </button>
+            </div>
+            <div class="thank-you-message hidden" id="thankYouMessage">
+                <div class="success-icon">🎉</div>
+                <h4>Terima Kasih!</h4>
+                <p>Konfirmasi Anda telah tercatat</p>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <div class="footer">
+            <p>"Karena itu apa yang telah Allah hubungkan, janganlah manusia memisahkannya."</p>
+            <p class="verse">Matius 19:6</p>
+            <div class="signature">
+                <p>Dengan penuh cinta,</p>
+                <h3>Sarah &amp; Michael</h3>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

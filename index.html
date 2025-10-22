@@ -97,3 +97,79 @@
     <script src="script.js"></script>
 </body>
 </html>
+    <!-- ... kode sebelumnya tetap ... -->
+
+    <script>
+        // Fungsi untuk mengambil parameter dari URL
+        function getParameterFromURL(name) {
+            const urlParams = new URLSearchParams(window.location.search);
+            return urlParams.get(name);
+        }
+
+        // Fungsi untuk menampilkan nama tamu
+        function displayGuestName() {
+            const nama = getParameterFromURL('nama');
+            const guestNameElement = document.getElementById('guestName');
+            console.log('Nama dari URL:', nama); // Debug line
+            
+            if (nama && nama.trim() !== '') {
+                // Decode URL dan format nama
+                const namaDecoded = decodeURIComponent(nama).replace(/\+/g, ' ');
+                guestNameElement.innerHTML = namaDecoded;
+                
+                // Simpan di localStorage
+                localStorage.setItem('namaTamu', namaDecoded);
+                console.log('Nama ditampilkan:', namaDecoded); // Debug line
+            } else {
+                guestNameElement.innerHTML = 'Tamu Undangan';
+                console.log('Nama default ditampilkan'); // Debug line
+            }
+        }
+
+        // Fungsi konfirmasi kehadiran
+        function confirmAttendance(status) {
+            const nama = getParameterFromURL('nama') || localStorage.getItem('namaTamu') || 'Tamu Undangan';
+            const namaDecoded = decodeURIComponent(nama).replace(/\+/g, ' ');
+            
+            // Sembunyikan tombol, tampilkan pesan terima kasih
+            document.getElementById('rsvpButtons').classList.add('hidden');
+            document.getElementById('thankYouMessage').classList.remove('hidden');
+            
+            // Simpan data konfirmasi
+            const konfirmasiData = {
+                nama: namaDecoded,
+                status: status,
+                waktu: new Date().toLocaleString('id-ID')
+            };
+            
+            // Simpan di localStorage
+            localStorage.setItem('konfirmasiUndangan', JSON.stringify(konfirmasiData));
+            
+            // Tampilkan pesan personal
+            let pesan = '';
+            if (status === 'hadir') {
+                pesan = `Terima kasih ${namaDecoded}! Kami tidak sabar bertemu dengan Anda. ❤️`;
+            } else {
+                pesan = `Terima kasih ${namaDecoded} atas informasinya. Doakan kami ya! 🙏`;
+            }
+            
+            alert(pesan);
+            
+            console.log('Data Konfirmasi:', konfirmasiData);
+        }
+
+        // Jalankan ketika halaman dimuat
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('Halaman dimuat - menjalankan displayGuestName');
+            displayGuestName();
+            
+            // Cek jika sudah konfirmasi sebelumnya
+            const sudahKonfirmasi = localStorage.getItem('konfirmasiUndangan');
+            if (sudahKonfirmasi) {
+                document.getElementById('rsvpButtons').classList.add('hidden');
+                document.getElementById('thankYouMessage').classList.remove('hidden');
+            }
+        });
+    </script>
+</body>
+</html>

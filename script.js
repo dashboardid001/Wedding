@@ -1,124 +1,43 @@
-// Fungsi untuk mengambil parameter dari URL
-function getParameterFromURL(name) {
+// Simple version - pasti work
+function showGuestName() {
+    // Ambil parameter dari URL
     const urlParams = new URLSearchParams(window.location.search);
-    return urlParams.get(name);
-}
-
-// Fungsi untuk menampilkan nama tamu
-function displayGuestName() {
-    const nama = getParameterFromURL('nama');
-    const guestNameElement = document.getElementById('guestName');
+    const namaParam = urlParams.get('nama');
     
-    if (nama) {
-        // Decode URL dan format nama
-        const namaDecoded = decodeURIComponent(nama).replace(/\+/g, ' ');
-        guestNameElement.innerHTML = `<span style="color: #d4af37;">${namaDecoded}</span>`;
-        
-        // Simpan di localStorage
-        localStorage.setItem('namaTamu', namaDecoded);
+    const namaElement = document.getElementById('guestName');
+    
+    if (namaParam) {
+        // Ganti + dengan spasi
+        const namaFix = namaParam.replace(/\+/g, ' ');
+        namaElement.textContent = namaFix;
+        console.log('Nama ditemukan:', namaFix);
     } else {
-        guestNameElement.innerHTML = '<span style="color: #666;">Tamu Undangan</span>';
+        namaElement.textContent = 'Tamu Undangan';
+        console.log('Nama tidak ditemukan, menggunakan default');
     }
 }
 
-// Fungsi konfirmasi kehadiran
 function confirmAttendance(status) {
-    const nama = getParameterFromURL('nama') || localStorage.getItem('namaTamu') || 'Tamu Undangan';
-    const namaDecoded = decodeURIComponent(nama).replace(/\+/g, ' ');
+    const namaElement = document.getElementById('guestName');
+    const nama = namaElement.textContent;
     
-    // Sembunyikan tombol, tampilkan pesan terima kasih
-    document.getElementById('rsvpButtons').classList.add('hidden');
-    document.getElementById('thankYouMessage').classList.remove('hidden');
+    // Sembunyikan tombol
+    document.getElementById('rsvpButtons').style.display = 'none';
     
-    // Simpan data konfirmasi
-    const konfirmasiData = {
-        nama: namaDecoded,
-        status: status,
-        waktu: new Date().toLocaleString('id-ID'),
-        ip: await getIPAddress()
-    };
+    // Tampilkan pesan sukses
+    const thankYouDiv = document.getElementById('thankYouMessage');
+    thankYouDiv.style.display = 'block';
     
-    // Simpan di localStorage
-    localStorage.setItem('konfirmasiUndangan', JSON.stringify(konfirmasiData));
-    
-    // Tampilkan pesan personal
-    let pesan = '';
+    // Pesan alert
     if (status === 'hadir') {
-        pesan = `Terima kasih ${namaDecoded}! Kami tidak sabar bertemu dengan Anda. ❤️`;
+        alert(`Terima kasih ${nama}! Kami tunggu kehadirannya.`);
     } else {
-        pesan = `Terima kasih ${namaDecoded} atas informasinya. Doakan kami ya! 🙏`;
-    }
-    
-    // Optional: Tampilkan alert
-    setTimeout(() => {
-        alert(pesan);
-    }, 500);
-    
-    // Kirim data ke console (bisa diganti dengan API)
-    console.log('Data Konfirmasi:', konfirmasiData);
-    
-    // Optional: Kirim ke Google Sheets
-    sendToGoogleSheets(konfirmasiData);
-}
-
-// Fungsi untuk mendapatkan IP address
-async function getIPAddress() {
-    try {
-        const response = await fetch('https://api.ipify.org?format=json');
-        const data = await response.json();
-        return data.ip;
-    } catch (error) {
-        return 'unknown';
+        alert(`Terima kasih ${nama} atas konfirmasinya.`);
     }
 }
 
-// Fungsi untuk mengirim data ke Google Sheets (placeholder)
-function sendToGoogleSheets(data) {
-    // Ini akan kita setup nanti
-    console.log('Mengirim data ke Google Sheets:', data);
-    // Implementasi dengan Google Apps Script bisa ditambahkan later
-}
-
-// Fungsi hitung mundur ke hari H
-function countdown() {
-    const weddingDate = new Date('2025-03-15').getTime();
-    const now = new Date().getTime();
-    const difference = weddingDate - now;
-    
-    const days = Math.floor(difference / (1000 * 60 * 60 * 24));
-    console.log(`⏳ Menuju hari H: ${days} hari lagi`);
-    
-    // Bisa ditampilkan di halaman jika mau
-    // document.getElementById('countdown').innerText = `${days} hari menuju hari bahagia`;
-}
-
-// Jalankan semua fungsi ketika halaman dimuat
+// Jalankan ketika halaman siap
 document.addEventListener('DOMContentLoaded', function() {
-    displayGuestName();
-    countdown();
-    
-    // Cek jika sudah konfirmasi sebelumnya
-    const sudahKonfirmasi = localStorage.getItem('konfirmasiUndangan');
-    if (sudahKonfirmasi) {
-        document.getElementById('rsvpButtons').classList.add('hidden');
-        document.getElementById('thankYouMessage').classList.remove('hidden');
-    }
+    console.log('🚀 Undangan siap!');
+    showGuestName();
 });
-
-// Fungsi tambahan: Share undangan
-function shareInvitation() {
-    const nama = getParameterFromURL('nama') || localStorage.getItem('namaTamu') || 'Tamu Undangan';
-    const shareText = `Hai! Saya ${nama} ingin berbagi undangan pernikahan Sarah & Michael. `;
-    const shareUrl = window.location.href;
-    
-    if (navigator.share) {
-        navigator.share({
-            title: 'Undangan Pernikahan Sarah & Michael',
-            text: shareText,
-            url: shareUrl
-        });
-    } else {
-        // Fallback untuk browser yang tidak support Web Share API
-        prompt('Copy link berikut untuk berbagi:', shareUrl);
-    }
-}
